@@ -56,7 +56,7 @@ def relativeAreaCovered(matrix_ROI, matrix_intersection, slice_thickness):
         if (area_ROI != 0):
             relativeAreaCovered.append(area_intersection/area_ROI)
             length_of_ROI += slice_thickness
-            if (area_intersection / area_ROI > 0.96):
+            if (area_intersection / area_ROI > 0.90):
                 length_of_intersection += slice_thickness
 
     return relativeAreaCovered, length_of_ROI, length_of_intersection
