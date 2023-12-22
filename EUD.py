@@ -1,6 +1,8 @@
 from connect import *
 import csv
 
+"This file calculates the mean dose in the esophagus for both physical dose and EQD2, and saves the values to a csv file. "
+
 outputdir = 'H:/NyttigData'
 
 patient_db = get_current('PatientDB')
