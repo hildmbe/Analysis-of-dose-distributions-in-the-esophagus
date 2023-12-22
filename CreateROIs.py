@@ -1,5 +1,7 @@
 from connect import *
 
+"This file creates ROIs from dose and intersec ROIs"
+
 def createRoiFromDose(plan, case, threshold_level):
     ROI_name = str(threshold_level)+'Gy'
     ROI = case.PatientModel.CreateRoi(Name=ROI_name, Color='Yellow')
