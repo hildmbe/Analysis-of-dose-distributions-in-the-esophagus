@@ -2,6 +2,8 @@
 
 import numpy as np; import statistics; import csv
 
+
+'''Denne funskjonen lager en 3D dose matrise fra en 1D dose matrise og korresponderende indekser'''
 def createTotalROIDoseMatrix(Dose_matrix_1d, dim, indicies):
     Total_ROI_dose_matrix = np.zeros(dim[0]*dim[1]*dim[2])
     for index, dose in zip(indicies, Dose_matrix_1d):
@@ -9,13 +11,15 @@ def createTotalROIDoseMatrix(Dose_matrix_1d, dim, indicies):
     
     return Total_ROI_dose_matrix.reshape(dim)
 
+''' Denne funskjonen lager en 3D volum matrise fra en 1D dose matrise og korresponderende indekser '''
 def createVolumeROIMatrix(Volume_matrix_1d, dim, indicies):
     Volume_ROI_matrix = np.zeros(dim[0]*dim[1]*dim[2])
     for index, vol in zip(indicies, Volume_matrix_1d):
         Volume_ROI_matrix[index] = vol
         
     return Volume_ROI_matrix.reshape(dim)
-        
+    
+''' Denne fuksjonen leser samler inn data fra en csv fil'''
 def collectData(filename):
     rows = []
     with open(filename, 'r') as file:
@@ -27,6 +31,7 @@ def collectData(filename):
             rows.append(y)
     return rows
 
+''' Denne funskjonen omregner en valing 1D dosematrise til EQD2 '''
 def ConvertDoseMatrixToEQD2(Dose_matrix_1d, num_frac, ab):
     doseMatrixEQD2 = np.zeros(len(Dose_matrix_1d))
     for i, dose in enumerate(Dose_matrix_1d):
@@ -34,6 +39,8 @@ def ConvertDoseMatrixToEQD2(Dose_matrix_1d, num_frac, ab):
     
     return doseMatrixEQD2
 
+
+''' Denne funskjonen omregner en valing 1D dosematrise til EQD2 med tiden tatt hensyn til '''
 def ConvertDoseMatrixToEQD2withTIME(Dose_matrix_1d, num_frac, ab, T, T_ref):
     doseMatrixEQD2 = np.zeros(len(Dose_matrix_1d))
     for i, dose in enumerate(Dose_matrix_1d):
@@ -138,6 +145,8 @@ def getMaxPercentCircumferenceIrradiatedPerDoseLevel(Dose_matrix, Vol_matrix, di
     
     return max(Max_overlap)
 
+
+''' Denne funksjonen henter ut dose statistikken som ble plottet i Appendix A '''
 def GetDoseStatisticsPerSliceNEW(Dose_matrix, Vol_matrix, indices, dim, thr, slice_thickness):
     
     Median_Dose_per_slice, EightyPercent_dose_per_slice, TwentyPercent_dose_per_slice  = [], [], []
@@ -186,10 +195,6 @@ def GetDoseStatisticsPerSliceNEW(Dose_matrix, Vol_matrix, indices, dim, thr, sli
                     else:
                         correct_index_20_prosent = index_1
                         break
-                    
-
-    
-            
             
             Median_Dose_per_slice.append(statistics.median(doses_in_slice))
             
