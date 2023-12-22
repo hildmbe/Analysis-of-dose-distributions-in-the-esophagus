@@ -74,36 +74,6 @@ def getDifferentialVolume(Dose_matrix_1d, Vol_matrix_1d, bin_size, N):
                 
     return volumes, doses
     
-def GetDoseStatisticsPerSlice(Dose_matrix, Vol_matrix, indices, dim, thr, slice_thickness):
-    
-    Minimum_Dose_per_slice, Maximum_Dose_per_slice, Median_Dose_per_slice, TwentyfivePercent_dose_per_slice, SeventyfivePercent_dose_per_slice  = [], [], [], [], []
-    length_of_full_dose = 0
-    
-    for k in range(dim[0]):
-        doses_in_slice = []
-        for s in range(dim[1]):
-            for r in range(dim[2]):
-                if Dose_matrix[k, s, r] > 0:
-                    doses_in_slice.append(Dose_matrix[k, s, r])
-                    
-        if len(doses_in_slice) > 1:
-            Minimum_Dose_per_slice.append(min(doses_in_slice))
-            
-            Maximum_Dose_per_slice.append(max(doses_in_slice))
-            
-            doses_in_slice.sort()
-            Median_Dose_per_slice.append(statistics.median(doses_in_slice))
-            
-            doses_per_slice_half1 = doses_in_slice[0:(len(doses_in_slice)//2)]
-            doses_per_slice_half2 = doses_in_slice[(len(doses_in_slice)//2):]
-            TwentyfivePercent_dose_per_slice.append(statistics.median(doses_per_slice_half2))
-            SeventyfivePercent_dose_per_slice.append(statistics.median(doses_per_slice_half1))
-            
-            if (max(doses_in_slice) - statistics.median(doses_per_slice_half1) <= 10) and (statistics.median(doses_per_slice_half1) > thr):
-                length_of_full_dose += slice_thickness
-        
-    return Minimum_Dose_per_slice, Maximum_Dose_per_slice, Median_Dose_per_slice, TwentyfivePercent_dose_per_slice, SeventyfivePercent_dose_per_slice, length_of_full_dose
-             
 def simpleAreaCoveredFAST(Vol_matrix_1d, Dose_matrix_1d, indicies, slice_thickness, dim, overlap_threshold, N):
     thresholds = np.linspace(0, 60, N)
     lengths = np.zeros(len(thresholds))
@@ -170,7 +140,7 @@ def getMaxPercentCircumferenceIrradiatedPerDoseLevel(Dose_matrix, Vol_matrix, di
 
 def GetDoseStatisticsPerSliceNEW(Dose_matrix, Vol_matrix, indices, dim, thr, slice_thickness):
     
-    Median_Dose_per_slice, TwentyfivePercent_dose_per_slice, SeventyfivePercent_dose_per_slice  = [], [], []
+    Median_Dose_per_slice, EightyPercent_dose_per_slice, TwentyPercent_dose_per_slice  = [], [], []
     length_of_full_dose = 0
     
     for k in range(dim[0]):
@@ -202,7 +172,7 @@ def GetDoseStatisticsPerSliceNEW(Dose_matrix, Vol_matrix, indices, dim, thr, sli
             for index, vol in enumerate(rel_volumes_sorted):
                 sum_vol += vol
                 if sum_vol >= 0.2*total_volume:
-                    correct_index_75_prosent = index
+                    correct_index_80_prosent = index
                     break
                 
             sum_vol_1 = 0
@@ -211,37 +181,26 @@ def GetDoseStatisticsPerSliceNEW(Dose_matrix, Vol_matrix, indices, dim, thr, sli
                 sum_vol_1 += vol_1
                 if sum_vol_1 >= 0.8*total_volume:
                     if index_1 < len(rel_volumes_sorted)-1:
-                        correct_index_25_prosent = index_1 + 1
+                        correct_index_20_prosent = index_1 + 1
                         break
                     else:
-                        correct_index_25_prosent = index_1
-                        print("Hei")
+                        correct_index_20_prosent = index_1
                         break
                     
-            '''sums = 0
-            for x in range(correct_index_25_prosent+1):
-                
-                sums += rel_volumes_sorted[x]'''
-            
-            #print(str(len(doses_in_slice)) +':'+ (str(correct_index_25_prosent))+':'+str(sums/total_volume) + ':::' + str(doses_in_slice[correct_index_25_prosent]) + ';;;;;;' + str(doses_in_slice[correct_index_25_prosent+1]))
-            
-            #TwentyfivePercent_dose_per_slice.append(doses_in_slice[correct_index])
+
+    
             
             
             Median_Dose_per_slice.append(statistics.median(doses_in_slice))
             
-            #doses_per_slice_half1 = doses_in_slice[0:(len(doses_in_slice)//2)]
-            #doses_per_slice_half2 = doses_in_slice[(len(doses_in_slice)//2):]
-            SeventyfivePercent_dose_per_slice.append(doses_in_slice[correct_index_75_prosent])
-            TwentyfivePercent_dose_per_slice.append(doses_in_slice[correct_index_25_prosent])
+            SeventyfivePercent_dose_per_slice.append(doses_in_slice[correct_index_80_prosent])
+            TwentyfivePercent_dose_per_slice.append(doses_in_slice[correct_index_20_prosent])
             
             
             if statistics.median(doses_in_slice) > thr:
                 length_of_full_dose += slice_thickness
         
-                
-        
-    return Median_Dose_per_slice, TwentyfivePercent_dose_per_slice, SeventyfivePercent_dose_per_slice, length_of_full_dose
+    return Median_Dose_per_slice, TwentyPercent_dose_per_slice, EightyPercent_dose_per_slice, length_of_full_dose
 
 def createCircumferenceMatrix(vol_matrix_1d, dose_matrix, indices, dim):
     circumference_indices = []
