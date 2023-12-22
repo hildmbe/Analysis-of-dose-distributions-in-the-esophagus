@@ -52,6 +52,7 @@ def ConvertDoseMatrixToEQD2withTIME(Dose_matrix_1d, num_frac, ab, T, T_ref):
     
     return doseMatrixEQD2
 
+''' Denne funksjonen regner ut middel dosen til spiserøret '''
 def getMeanDose(Dose_matrix_1D, Volume_matrix_1d):
     total_volume = 0 
     for vol in Volume_matrix_1d:
@@ -62,6 +63,7 @@ def getMeanDose(Dose_matrix_1D, Volume_matrix_1d):
     
     return Mean_dose
 
+''' Denne funksjonen regner ut dose-volum parametere for dosenivåer mellom 0 og 60 Gy '''
 def getVolume(Dose_matrix_1d, Vol_matrix_1d, N):
     doses = np.linspace(0, 60, N)
     volumes = np.zeros(N)
@@ -80,7 +82,8 @@ def getDifferentialVolume(Dose_matrix_1d, Vol_matrix_1d, bin_size, N):
                 volumes[i] += vol
                 
     return volumes, doses
-    
+
+''' Denne funksjonen kan brukes til å finne dose-lengde parametere mellom 0 og 60 Gy'''    
 def simpleAreaCoveredFAST(Vol_matrix_1d, Dose_matrix_1d, indicies, slice_thickness, dim, overlap_threshold, N):
     thresholds = np.linspace(0, 60, N)
     lengths = np.zeros(len(thresholds))
