@@ -45,15 +45,15 @@ def ConvertDoseMatrixToEQD2withTIME(Dose_matrix_1d, num_frac, ab, T, T_ref):
     
     return doseMatrixEQD2
 
-def getEUD(Dose_matrix_1D, Volume_matrix_1d):
+def getMeanDose(Dose_matrix_1D, Volume_matrix_1d):
     total_volume = 0 
     for vol in Volume_matrix_1d:
         total_volume += vol
-    EUD = 0
+    Mean_dose = 0
     for dose, volume in zip(Dose_matrix_1D, Volume_matrix_1d):
-        EUD += dose*(volume/total_volume)
+        Mean_dose += dose*(volume/total_volume)
     
-    return EUD
+    return Mean_dose
 
 def getVolume(Dose_matrix_1d, Vol_matrix_1d, N):
     doses = np.linspace(0, 60, N)
