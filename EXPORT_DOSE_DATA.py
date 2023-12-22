@@ -1,7 +1,9 @@
 from connect import *
 from CreateROIs import createRoiFromDose, createIntersecROI
 import os; import csv
- 
+
+"This file exports dose and volume (ROI specific) matrices (flattend) to textfiles, with corresponding indices in order to use the data further"
+
 def GetROIDoseVolumeAndIndices(plan, ROI):
    dose = plan.TreatmentCourse.TotalDose
    dose_matrix = dose.DoseValues.DoseData
